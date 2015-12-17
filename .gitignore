@@ -1,0 +1,6 @@
+cache/
+clients/
+cookbooks/
+nodes/
+remote_file/
+vms/
