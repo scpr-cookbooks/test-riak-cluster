@@ -37,6 +37,27 @@ end
 
 # -- riakcs servers -- #
 
+admin_creds = {
+  admin_key: "INVALID",
+  secret_key: "INVALID",
+  anon_create: true,
+}
+
+admin_user_json = File.expand_path("../admin_user.json",__FILE__)
+if File.exists?(admin_user_json)
+  begin
+    obj = JSON.parse(File.read(admin_user_json))
+
+    admin_creds = {
+      admin_key: obj['key_id'],
+      secret_key: obj['key_secret'],
+      anon_create: false,
+    }
+  rescue
+    puts "FAILED TO PARSE ADMIN CREDENTIALS"
+  end
+end
+
 3.times do |i|
   machine "riakcs00#{i}" do
     converge true
@@ -61,9 +82,9 @@ end
         root_host:    'riak.ewr',
         ip:           ip,
         stanchion_ip: haproxy_ip,
-        admin_key:    "XPXWM5YXYMRUBYPLWVQK",
-        admin_secret: "dN9KXDZxn9kh5pDrdVNF8X6-PXIKC11GDDwF9g==",
-        anon_create:  false,
+        admin_key:    admin_creds[:admin_key],
+        admin_secret: admin_creds[:secret_key],
+        anon_create:  admin_creds[:anon_create],
       },
       consul: {
         servers: [consul_ip],

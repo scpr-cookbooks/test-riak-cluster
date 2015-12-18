@@ -4,3 +4,6 @@ cookbooks/
 nodes/
 remote_file/
 vms/
+
+admin_user.json
+s3cmd.cfg
